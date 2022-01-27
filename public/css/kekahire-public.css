@@ -2,3 +2,106 @@
  * All of the CSS for your public-facing functionality should be
  * included in this file.
  */
+
+.kekahire-hide-element {
+	display: none;
+} 
+ 
+.kekahire-smart-listing-container .kekahire-location-selector {
+	text-align: center;
+}
+.kekahire-smart-listing-container .kekahire-location-selector span {
+	font-size: 18px;
+	color: #3A3A3A;
+	margin-right: 20px;
+}
+.kekahire-smart-listing-container .kekahire-location-selector select {
+	padding: 10px 10px;
+	width: 300px;
+	text-align: left;
+	border-color: #000;
+	font-size: 18px;
+}
+
+.kekahire-smart-listing-container .kekahire-sidebar-listing-wrapper {
+  margin-top: 50px;
+}
+.kekahire-smart-listing-container .kekahire-sidebar-listing-wrapper h4 {
+  font-size: 18px;
+  color: #3A3A3A;
+}
+.kekahire-smart-listing-container .kekahire-sidebar-wrapper {
+  width: 250px;
+  float: left;
+  margin-right: 20px;
+  margin-top: 25px;
+}
+.kekahire-smart-listing-container .kekahire-sidebar-wrapper ul {
+  list-style: none;
+  padding-left: 0;
+}
+.kekahire-smart-listing-container .kekahire-sidebar-wrapper ul li {
+	font-size: 16px;
+	color: #3A3A3A;
+	cursor: pointer;
+	padding-bottom: 25px;
+}
+.kekahire-smart-listing-container .kekahire-sidebar-wrapper ul li.selected,
+.kekahire-smart-listing-container .kekahire-sidebar-wrapper ul li:hover {
+	color: #F76919;
+}
+.kekahire-smart-listing-container .kekahire-listing-wrapper {
+  float: left;
+  margin-top: 25px;
+  width: calc( 100% - 270px );
+}
+.kekahire-smart-listing-container .kekahire-listing {
+  margin-bottom: 30px;
+  display: inline-block;
+  width: 100%;
+}
+.kekahire-smart-listing-container .kekahire-listing-title-wrapper {
+  float: left;
+  width: calc( 100% - 200px );
+}
+.kekahire-smart-listing-container .kekahire-listing-button-wrapper {
+  width: 200px;
+  float: left;
+}
+.kekahire-smart-listing-container .kekahire-sidebar-listing-wrapper .kekahire-listing h3 {
+  font-size: 24px;
+  color: #3A3A3A;
+}
+.kekahire-smart-listing-container .kekahire-apply-button {
+  background: #F8F8F8;
+  color: #757575;
+  padding: 10px 50px;
+  border-radius: 25px;
+  font-size: 16px;
+  text-align: center;
+  max-width: 250px;
+  display: block;
+}
+.kekahire-smart-listing-container .kekahire-apply-button:hover {
+  background: #000;
+  color: #FFF;
+}
+
+@media only screen and (max-width: 1023px) {
+	.kekahire-smart-listing-container .kekahire-listing-wrapper {
+	  float: none;
+	  margin-top: 25px;
+	  width: 100%;
+	}
+}
+
+@media only screen and (max-width: 640px) {
+	.kekahire-smart-listing-container .kekahire-listing-title-wrapper {
+		float: none;
+		width: 100%;
+		margin-bottom: 20px;
+	}
+}
+
+
+

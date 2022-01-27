@@ -73,6 +73,12 @@ class Kekahire_Admin {
 		 * class.
 		 */
 
+		if( $_GET[ 'page' ] == "kekahire-settings" ) {
+
+			wp_enqueue_style( $this->plugin_name . '-select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css', array(), '4.0.13', 'all' );
+
+		}
+		
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/kekahire-admin.css', array(), $this->version, 'all' );
 
 	}
@@ -95,9 +101,250 @@ class Kekahire_Admin {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
+		 
+		if( $_GET[ 'page' ] == "kekahire-settings" ) {
+
+			wp_enqueue_script( $this->plugin_name . '-select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js', array( 'jquery' ), '4.0.13', false );
+
+		}
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/kekahire-admin.js', array( 'jquery' ), $this->version, false );
+		
+		/**
+		 * Localize script.
+		 *
+		 * @since    1.0.0
+		 */
+		wp_localize_script( $this->plugin_name, 'WM_OBJECT',
+			array( 
+				'ajaxurl' => admin_url( 'admin-ajax.php' ),
+			)
+		);
 
+	}
+	
+	/**
+	 * Admin menu hook for adding Kekahire Settings menu.
+	 *
+	 * @since    1.0.0
+	 */
+	public function add_options_page_kekahire() {
+
+		add_menu_page( 'Kekahire Settings', 'Kekahire', 'administrator', 'kekahire-settings', array ( $this, 'kekahire_settings_page' ) , plugins_url( 'kekahire/admin/images/kekahire-icon.png' ) );
+
+	}
+	
+	/**
+	 * Kekahire Settings page.
+	 *
+	 * @since    1.0.0
+	 */
+	public function kekahire_settings_page() {
+
+		$kekahire_subdomain = get_option( 'kekahire_subdomain' );
+
+		$kekahire_dept_payload = wp_remote_get( "https://$kekahire_subdomain.kekahire.com/api/organization/departments/" );
+		$kekahire_location_payload = wp_remote_get( "https://$kekahire_subdomain.kekahire.com/api/organization/locations/" );
+
+		$departments = json_decode( $kekahire_dept_payload[ 'body' ] , true );
+		$locations = json_decode( $kekahire_location_payload[ 'body' ] , true );
+		
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-kekahire-countries.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/kekahire-admin-display.php';
+
+	}
+	
+	/**
+	 * Hook to register the settings fields for Kekahire.
+	 *
+	 * @since    1.0.0
+	 */
+	public function register_setting_kekahire() {
+
+		add_settings_section( "kekahire_settings", "General Settings", array( $this, "kekahire_settings_callback" ), "kekahire-settings" );
+
+		add_settings_field( "kekahire_subdomain", "Kekahire Subdomain", array( $this, "kekahire_subdomain_callback" ), "kekahire-settings", "kekahire_settings" );
+		
+		add_settings_section( "kekahire_settings_color", "Color Settings", array( $this, "kekahire_settings_color_callback" ), "kekahire-settings" );
+
+		add_settings_field( "kekahire_color", "Color Theme", array( $this, "kekahire_color_callback" ), "kekahire-settings", "kekahire_settings_color" );
+		
+		add_settings_field( "kekahire_button_bg", "Button Background", array( $this, "kekahire_button_bg_callback" ), "kekahire-settings", "kekahire_settings_color" );
+		add_settings_field( "kekahire_button_color", "Button Color", array( $this, "kekahire_button_color_callback" ), "kekahire-settings", "kekahire_settings_color" );
+
+		add_settings_field( "kekahire_button_hover_bg", "Button Hover Background", array( $this, "kekahire_button_hover_bg_callback" ), "kekahire-settings", "kekahire_settings_color" );
+		add_settings_field( "kekahire_button_hover_color", "Button Hover Color", array( $this, "kekahire_button_hover_color_callback" ), "kekahire-settings", "kekahire_settings_color" );
+		
+		register_setting( "kekahire_settings" , "kekahire_subdomain" );
+		register_setting( "kekahire_settings" , "kekahire_color" );
+		register_setting( "kekahire_settings" , "kekahire_button_bg" );
+		register_setting( "kekahire_settings" , "kekahire_button_color" );
+		register_setting( "kekahire_settings" , "kekahire_button_hover_bg" );
+		register_setting( "kekahire_settings" , "kekahire_button_hover_color" );
+
+	}
+
+	/**
+	 * Callback to display the "Kekahire Settings" section description.
+	 *
+	 * @since    1.0.0
+	 */
+	public function kekahire_settings_callback() {
+
+		?>
+		
+		<p class="description">Please enter your Keka subdomain below</p>
+		
+		<?php
+
+	}
+
+	/**
+	 * Callback to display the "Kekahire Subdomain" setting.
+	 *
+	 * @since    1.0.0
+	 */
+	public function kekahire_subdomain_callback() {
+
+		?>
+		
+		<input type="text" id="kekahire_subdomain" name="kekahire_subdomain" value="<?php echo get_option( 'kekahire_subdomain' ); ?>" />.kekahire.com
+		
+		<?php
+
+	}
+	
+	/**
+	 * Callback to display the "Kekahire Color Settings" section description.
+	 *
+	 * @since    1.0.0
+	 */
+	public function kekahire_settings_color_callback() {
+
+		?>
+		
+		<p class="description">Please select Color theme</p>
+		
+		<?php
+
+	}
+
+	/**
+	 * Callback to display the "Kekahire Color Setting" setting.
+	 *
+	 * @since    1.0.0
+	 */
+	public function kekahire_color_callback() {
+
+		?>
+		
+		<input type="text" id="kekahire_color" name="kekahire_color" value="<?php echo get_option( 'kekahire_color' ); ?>" />
+		
+		<?php
+
+	}
+	
+	/**
+	 * Callback to display the "Kekahire Button Background Setting" setting.
+	 *
+	 * @since    1.0.0
+	 */
+	public function kekahire_button_bg_callback() {
+
+		?>
+		
+		<input type="text" id="kekahire_button_bg" name="kekahire_button_bg" value="<?php echo get_option( 'kekahire_button_bg' ); ?>" />
+		
+		<?php
+
+	}
+	
+	/**
+	 * Callback to display the "Kekahire Button Color Setting" setting.
+	 *
+	 * @since    1.0.0
+	 */
+	public function kekahire_button_color_callback() {
+
+		?>
+		
+		<input type="text" id="kekahire_button_color" name="kekahire_button_color" value="<?php echo get_option( 'kekahire_button_color' ); ?>" />
+		
+		<?php
+
+	}
+	
+	/**
+	 * Callback to display the "Kekahire Button Hover Background Setting" setting.
+	 *
+	 * @since    1.0.0
+	 */
+	public function kekahire_button_hover_bg_callback() {
+
+		?>
+		
+		<input type="text" id="kekahire_button_hover_bg" name="kekahire_button_hover_bg" value="<?php echo get_option( 'kekahire_button_hover_bg' ); ?>" />
+		
+		<?php
+
+	}
+	
+	/**
+	 * Callback to display the "Kekahire Button Hover Color Setting" setting.
+	 *
+	 * @since    1.0.0
+	 */
+	public function kekahire_button_hover_color_callback() {
+
+		?>
+		
+		<input type="text" id="kekahire_button_hover_color" name="kekahire_button_hover_color" value="<?php echo get_option( 'kekahire_button_hover_color' ); ?>" />
+		
+		<?php
+
+	}
+	
+	/**
+	 * Callback to display state/city.
+	 *
+	 * @since    1.0.0
+	 */
+	public function kekahire_load_state_city_ajax(){
+		
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-kekahire-countries.php';
+		$classObject = new CB_Countries();
+		$statesname = $classObject->get_states();
+
+		$country = $_POST["country"];
+		$state = explode(",",$_POST["state"]);
+
+		header("Content-Type: text/html");
+		
+		$output = '';
+		
+		$kekahire_subdomain = get_option( 'kekahire_subdomain' );
+		$kekahire_location_payload = wp_remote_get( "https://$kekahire_subdomain.kekahire.com/api/organization/locations/" );
+		$locations = json_decode( $kekahire_location_payload[ 'body' ] , true );
+		
+		if($country) {
+			foreach ( $locations as $location ) {
+				if($country == $location['address'][ 'countryCode' ]) {
+					$output .= '<option value="' . $location['address'][ 'state' ] . '">' . $statesname[$location['address'][ 'countryCode' ]][$location['address'][ 'state' ]] . '</option>'; 
+				}
+
+			}
+		}
+		
+		if($state) {
+			foreach ( $locations as $location ) {
+				if(in_array($location['address'][ 'state' ],$state)) {
+					$output .= '<option value="' . $location['address'][ 'city' ] . '">' . $location['address'][ 'city' ] . '</option>'; 
+				}
+
+			}
+		}
+		
+		die($output);
 	}
 
 }
