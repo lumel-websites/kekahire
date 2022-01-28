@@ -208,10 +208,10 @@ class Kekahire_Public {
 		<?php
 		if($listingtype == "smart") {
 		?>
-		<div class="kekahire-smart-listing-container">
+		<div class="kekahire-smart-listing-container" data-department="<?php echo $atts[ 'defaultdepartment' ]; ?>" data-location="<?php echo $atts[ 'defaultlocation' ]; ?>">
 			<div class="kekahire-location-selector-wrapper">
 				<div class="kekahire-location-selector">
-					<span class="">Select Locations</span>
+					<span class="">Select Location</span>
 					<select>
 						<option value="">All</option>
 						<?php
@@ -239,12 +239,43 @@ class Kekahire_Public {
 						?>
 					</select>
 				</div>
+				
+				<div class="kekahire-department-selector">
+					<span class="">Select Department</span>
+					<select>
+						<option value="">All</option>
+						<?php						
+						foreach ( $departments as $department ) {
+							
+							$departmentcount = '';
+							if($atts[ 'hidecount' ] != 1) {
+								$departmentcount = ' ('.$departmentcountarray[$department[ 'id' ]]['count'].')';
+							}
+							
+							$defaultdepartment = '';
+							if($atts[ 'defaultdepartment' ] == $department[ 'id' ]) {
+								$defaultdepartment = ' selected';
+							}
+							
+							if($departmentcountarray[$department[ 'id' ]]['count'] > 0)
+							{
+								echo '<option value="' . $department[ 'id' ] . '"'.$defaultdepartment.' />' . $department[ 'name' ] .$departmentcount;
+							}
+							else if($atts[ 'zerolisting' ] != 1) {
+								echo '<option value="' . $department[ 'id' ] . '"'.$defaultdepartment.' />' . $department[ 'name' ];
+							} 
+
+						}
+						?>
+						
+					</select>
+				</div>
 			</div>
 			<div class="kekahire-sidebar-listing-wrapper">
 				<h4>Departments</h4>
 				<div class="kekahire-sidebar-wrapper">
 					<ul>
-						<li <?php if($atts[ 'defaultdepartment' ] == '') {?>class="selected"<?php } ?> data-departmentId=""><span>All</span></li>
+						<li <?php if($atts[ 'defaultdepartment' ] == '') {?>class="selected"<?php } ?> data-value=""><span>All</span></li>
 						<?php							
 						foreach ( $departments as $department ) {
 							
@@ -260,10 +291,10 @@ class Kekahire_Public {
 							
 							if($departmentcountarray[$department[ 'id' ]]['count'] > 0)
 							{
-								echo '<li'.$defaultdepartment.' data-departmentId="' . $department[ 'id' ] . '"><span>' . $department[ 'name' ] .$departmentcount.'</span></li>';
+								echo '<li'.$defaultdepartment.' data-value="' . $department[ 'id' ] . '"><span>' . $department[ 'name' ] .$departmentcount.'</span></li>';
 							}
 							else if($atts[ 'zerolisting' ] != 1) {
-								echo '<li'.$defaultdepartment.' data-departmentId="' . $department[ 'id' ] . '"><span>' . $department[ 'name' ] .'</span></li>';
+								echo '<li'.$defaultdepartment.' data-value="' . $department[ 'id' ] . '"><span>' . $department[ 'name' ] .'</span></li>';
 							} 
 
 						}

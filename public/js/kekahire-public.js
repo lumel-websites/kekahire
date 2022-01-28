@@ -29,14 +29,15 @@
 	 * practising this, we should strive to set a better example in our own work.
 	 */
 	 
-	$(document).ready(function(e){
-		var loadlistingdepartment = function(ee){
-			var departmentId = $(this).attr("data-departmentId");
-			var city = $(".kekahire-location-selector select").val();
-			if(departmentId=="" && city=="") {
+	$(window).load(function(e){
+		var loadlisting = function(){
+			
+			var departmentId = $(".kekahire-smart-listing-container").attr("data-department");
+			var city         = $(".kekahire-smart-listing-container").attr("data-location");
+
+			if( departmentId == "" && city == "" ) {
 				$(".kekahire-listing").show();
-			}
-			else {
+			} else {
 				$(".kekahire-listing").hide();
 				
 				$(".kekahire-listing").each(function() {
@@ -51,60 +52,29 @@
 					}
 				});
 			}
+			
+		}
+		
+		loadlisting();
+		
+		$('.kekahire-sidebar-wrapper li').click( function() { 
+			$(".kekahire-smart-listing-container").attr("data-department",$(this).attr("data-value"));
+			loadlisting();
 			
 			$(".kekahire-sidebar-wrapper li").removeClass("selected");
 			$(this).addClass("selected");
-		}
-		var loadlistinglocation = function(ee){
-			var departmentId = $(".kekahire-sidebar-wrapper li.selected").attr("data-departmentId");
-			var city = $(this).val();
-			
-			if(departmentId=="" && city=="") {
-				$(".kekahire-listing").show();
-			}
-			else {
-				$(".kekahire-listing").hide();
-				
-				$(".kekahire-listing").each(function() {
-					if(departmentId=="") {
-						if($(this).attr("data-city")==city) { $(this).show(); }
-					} 
-					else if (city=="") {
-						if($(this).attr("data-departmentId")==departmentId) { $(this).show(); }
-					}
-					else {
-						if($(this).attr("data-departmentId")==departmentId && $(this).attr("data-city")==city) { $(this).show(); }
-					}
-				});
-			}
-		}
+		});
 		
-		$('.kekahire-sidebar-wrapper li').click( loadlistingdepartment );
-		$('.kekahire-location-selector select').change( loadlistinglocation );
+		$('.kekahire-department-selector select').change( function() { 
+			$(".kekahire-smart-listing-container").attr("data-department",$(this).val());
+			loadlisting();
+		});
 		
-		var defaultselected = function(ee){
-			var departmentId = $('.kekahire-sidebar-wrapper li.selected').attr("data-departmentId");
-			var city = $(".kekahire-location-selector select").val();
-			if(departmentId=="" && city=="") {
-				$(".kekahire-listing").show();
-			}
-			else {
-				$(".kekahire-listing").hide();
-				
-				$(".kekahire-listing").each(function() {
-					if(departmentId=="") {
-						if($(this).attr("data-city")==city) { $(this).show(); }
-					} 
-					else if (city=="") {
-						if($(this).attr("data-departmentId")==departmentId) { $(this).show(); }
-					}
-					else {
-						if($(this).attr("data-departmentId")==departmentId && $(this).attr("data-city")==city) { $(this).show(); }
-					}
-				});
-			}
-		}
-		defaultselected();
+		$('.kekahire-location-selector select').change( function() { 
+			$(".kekahire-smart-listing-container").attr("data-location",$(this).val());
+			loadlisting();
+		});
+		
 	});
 
 })( jQuery );
