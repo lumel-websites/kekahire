@@ -72,14 +72,19 @@ class Kekahire_Admin {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-
+		
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/kekahire-admin.css', array(), $this->version, 'all' );
+		
+		/**
+		 * Include Select2 CSS in admin settings page.
+		 *
+		 * @since    1.0.0
+		 */
 		if( $_GET[ 'page' ] == "kekahire-settings" ) {
 
 			wp_enqueue_style( $this->plugin_name . '-select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css', array(), '4.0.13', 'all' );
 
 		}
-		
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/kekahire-admin.css', array(), $this->version, 'all' );
 
 	}
 
@@ -101,12 +106,6 @@ class Kekahire_Admin {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-		 
-		if( $_GET[ 'page' ] == "kekahire-settings" ) {
-
-			wp_enqueue_script( $this->plugin_name . '-select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js', array( 'jquery' ), '4.0.13', false );
-
-		}
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/kekahire-admin.js', array( 'jquery' ), $this->version, false );
 		
@@ -115,11 +114,30 @@ class Kekahire_Admin {
 		 *
 		 * @since    1.0.0
 		 */
-		wp_localize_script( $this->plugin_name, 'WM_OBJECT',
+		wp_localize_script( $this->plugin_name, 'KH_OBJECT',
 			array( 
 				'ajaxurl' => admin_url( 'admin-ajax.php' ),
 			)
 		);
+		
+		/**
+		 * Include Select2 JS in admin settings page.
+		 *
+		 * @since    1.0.0
+		 */
+		if( $_GET[ 'page' ] == "kekahire-settings" ) {
+
+			wp_enqueue_script( $this->plugin_name . '-select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js', array( 'jquery' ), '4.0.13', false );
+
+		}
+		
+		/**
+		 * Include Color Picker JS in admin settings page.
+		 *
+		 * @since    1.0.0
+		 */
+		wp_enqueue_style( 'wp-color-picker' );
+		wp_enqueue_script( 'my-script-handle', plugins_url('my-script.js', __FILE__ ), array( 'wp-color-picker' ), false, true );
 
 	}
 	
@@ -128,7 +146,7 @@ class Kekahire_Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	public function add_options_page_kekahire() {
+	public function kekahire_add_options_page() {
 
 		add_menu_page( 'Kekahire Settings', 'Kekahire', 'administrator', 'kekahire-settings', array ( $this, 'kekahire_settings_page' ) , plugins_url( 'kekahire/admin/images/kekahire-icon.png' ) );
 
@@ -159,7 +177,7 @@ class Kekahire_Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	public function register_setting_kekahire() {
+	public function kekahire_register_setting() {
 
 		add_settings_section( "kekahire_settings", "General Settings", array( $this, "kekahire_settings_callback" ), "kekahire-settings" );
 
@@ -193,7 +211,7 @@ class Kekahire_Admin {
 
 		?>
 		
-		<p class="description">Please enter your Keka subdomain below</p>
+		<p class="description"><?php _e( 'Please enter your Keka subdomain below', 'kekahire' ); ?></p>
 		
 		<?php
 
@@ -223,7 +241,7 @@ class Kekahire_Admin {
 
 		?>
 		
-		<p class="description">Please select Color theme</p>
+		<p class="description"><?php _e( 'Please select Color theme', 'kekahire' ); ?></p>
 		
 		<?php
 
@@ -238,7 +256,7 @@ class Kekahire_Admin {
 
 		?>
 		
-		<input type="text" id="kekahire_color" name="kekahire_color" value="<?php echo get_option( 'kekahire_color' ); ?>" />
+		<input type="text" class="kekahire-my-color-field" id="kekahire_color" name="kekahire_color" value="<?php echo get_option( 'kekahire_color' ); ?>" />
 		
 		<?php
 
@@ -253,7 +271,7 @@ class Kekahire_Admin {
 
 		?>
 		
-		<input type="text" id="kekahire_button_bg" name="kekahire_button_bg" value="<?php echo get_option( 'kekahire_button_bg' ); ?>" />
+		<input type="text" class="kekahire-my-color-field" id="kekahire_button_bg" name="kekahire_button_bg" value="<?php echo get_option( 'kekahire_button_bg' ); ?>" />
 		
 		<?php
 
@@ -268,7 +286,7 @@ class Kekahire_Admin {
 
 		?>
 		
-		<input type="text" id="kekahire_button_color" name="kekahire_button_color" value="<?php echo get_option( 'kekahire_button_color' ); ?>" />
+		<input type="text" class="kekahire-my-color-field" id="kekahire_button_color" name="kekahire_button_color" value="<?php echo get_option( 'kekahire_button_color' ); ?>" />
 		
 		<?php
 
@@ -283,7 +301,7 @@ class Kekahire_Admin {
 
 		?>
 		
-		<input type="text" id="kekahire_button_hover_bg" name="kekahire_button_hover_bg" value="<?php echo get_option( 'kekahire_button_hover_bg' ); ?>" />
+		<input type="text" class="kekahire-my-color-field" id="kekahire_button_hover_bg" name="kekahire_button_hover_bg" value="<?php echo get_option( 'kekahire_button_hover_bg' ); ?>" />
 		
 		<?php
 
@@ -298,7 +316,7 @@ class Kekahire_Admin {
 
 		?>
 		
-		<input type="text" id="kekahire_button_hover_color" name="kekahire_button_hover_color" value="<?php echo get_option( 'kekahire_button_hover_color' ); ?>" />
+		<input type="text" class="kekahire-my-color-field" id="kekahire_button_hover_color" name="kekahire_button_hover_color" value="<?php echo get_option( 'kekahire_button_hover_color' ); ?>" />
 		
 		<?php
 

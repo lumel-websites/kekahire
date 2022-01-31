@@ -105,7 +105,7 @@ class Kekahire_Public {
 	 *
 	 * @since    1.0.0
 	 */
-	public function add_kekahire_shortcodes() {
+	public function kekahire_add_shortcodes() {
 
 		add_shortcode( 'kekajobs' , array ( $this, 'kekahire_listings_callback' ) );
 
@@ -241,9 +241,9 @@ class Kekahire_Public {
 				</div>
 				
 				<div class="kekahire-department-selector">
-					<span class="">Select Department</span>
+					<span class=""><?php _e( 'Select Department', 'kekahire' ); ?></span>
 					<select>
-						<option value="">All</option>
+						<option value=""><?php _e( 'All', 'kekahire' ); ?></option>
 						<?php						
 						foreach ( $departments as $department ) {
 							
@@ -272,10 +272,10 @@ class Kekahire_Public {
 				</div>
 			</div>
 			<div class="kekahire-sidebar-listing-wrapper">
-				<h4>Departments</h4>
+				<h4><?php _e( 'Departments', 'kekahire' ); ?></h4>
 				<div class="kekahire-sidebar-wrapper">
 					<ul>
-						<li <?php if($atts[ 'defaultdepartment' ] == '') {?>class="selected"<?php } ?> data-value=""><span>All</span></li>
+						<li <?php if($atts[ 'defaultdepartment' ] == '') {?>class="selected"<?php } ?> data-value=""><span><?php _e( 'All', 'kekahire' ); ?></span></li>
 						<?php							
 						foreach ( $departments as $department ) {
 							
@@ -425,7 +425,7 @@ class Kekahire_Public {
 
 					if( $listing_passed ) {
 
-						echo '<li class="listing"><a href="https://lumel.kekahire.com/jobdetails/' . $listing[ 'id' ] . '" target="_blank">' . $listing[ 'title' ] . '</a></li>';
+						echo '<li class="listing"><a href="https://'.$kekahire_subdomain.'.kekahire.com/jobdetails/' . $listing[ 'id' ] . '" target="_blank">' . $listing[ 'title' ] . '</a></li>';
 
 					}
 

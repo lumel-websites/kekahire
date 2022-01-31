@@ -157,11 +157,11 @@ class Kekahire {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		
-		/*Add settings page*/ 
-		$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_options_page_kekahire' );
-		$this->loader->add_action( 'admin_init', $plugin_admin, 'register_setting_kekahire' );
+		/* Add settings page in admin menu */ 
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'kekahire_add_options_page' );
+		$this->loader->add_action( 'admin_init', $plugin_admin, 'kekahire_register_setting' );
 		
-		/*Ajax function to get state/city*/
+		/* Ajax function to get state/city */
 		$this->loader->add_action('wp_ajax_nopriv_kekahire_load_state_city_ajax', $plugin_admin, 'kekahire_load_state_city_ajax');
 		$this->loader->add_action('wp_ajax_kekahire_load_state_city_ajax', $plugin_admin, 'kekahire_load_state_city_ajax');
 
@@ -182,7 +182,7 @@ class Kekahire {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 		
 		/*Add shortcode*/ 
-		$this->loader->add_action( 'init' , $plugin_public, 'add_kekahire_shortcodes' );
+		$this->loader->add_action( 'init' , $plugin_public, 'kekahire_add_shortcodes' );
 
 	}
 

@@ -16,7 +16,7 @@
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
 <div class="wrap kekahire-settings">
 	<h2>
-		<span class="main_title" tabindex="1">Kekahire for WordPress</span>
+		<span class="main_title" tabindex="1"><?php _e( 'Kekahire for WordPress', 'kekahire' ); ?></span>
 	</h2>
 	<form method="post" action="options.php">
         <?php
@@ -31,27 +31,27 @@
     </form>
     <hr>
     <div class="kekahire-shortcode-generator">
-    	<h2>Shortcode Generator</h2>
-    	<p>The <strong>[kekajobs]</strong> shortcode by default will retrieve all jobs across all locations and departments. To filter based on Location and/or Department, please select the appropriate options from below. Your shortcode will be auto-generated for you which can be added to any web page on your site.</p>
+    	<h2><?php _e( 'Shortcode Generator', 'kekahire' ); ?></h2>
+    	<p><?php _e( 'The', 'kekahire' ); ?> <strong>[kekajobs]</strong> <?php _e( 'shortcode by default will retrieve all jobs across all locations and departments. To filter based on Location and/or Department, please select the appropriate options from below. Your shortcode will be auto-generated for you which can be added to any web page on your site.', 'kekahire' ); ?></p>
     </div>
     <form id="kekahire-shortcode-generator-form">
     	<table class="form-table">
     		<tbody>
     			<tr>
-    				<th scope="row">Title</th>
+    				<th scope="row"><?php _e( 'Title', 'kekahire' ); ?></th>
     				<td><input type="text" id="kekahire-title" placeholder="Title"></td>
     			</tr>
 				<tr>
-    				<th scope="row">Listing Style</th>
+    				<th scope="row"><?php _e( 'Listing Style', 'kekahire' ); ?></th>
     				<td>
     					<select id="kekahire-listing-selector">
-    						<option value="simple">Simple</option>
-							<option value="smart">Smart</option>
+    						<option value="simple"><?php _e( 'Simple', 'kekahire' ); ?></option>
+							<option value="smart"><?php _e( 'Smart', 'kekahire' ); ?></option>
     					</select>
     				</td>
     			</tr>
-    			<tr class="admin-simple-listing-row">
-    				<th scope="row">Departments</th>
+    			<tr class="kekahire-admin-simple-listing-row">
+    				<th scope="row"><?php _e( 'Departments', 'kekahire' ); ?></th>
     				<td>
     					<select id="kekahire-department-selector" multiple>
     						<?php
@@ -70,11 +70,11 @@
 				$classObject = new CB_Countries();
 				$countriesname = $classObject->get_countries();
 				?>
-    			<tr class="admin-simple-listing-row">
-    				<th scope="row">Locations</th>
+    			<tr class="kekahire-admin-simple-listing-row">
+    				<th scope="row"><?php _e( 'Locations', 'kekahire' ); ?></th>
     				<td>
     					<select id="kekahire-location-selector">
-    						<option value="">All Locations</option>
+    						<option value=""><?php _e( 'All Locations', 'kekahire' ); ?></option>
     						<?php
 
     						foreach ( $locations as $location ) {
@@ -87,36 +87,36 @@
     					</select>
     				</td>
     			</tr>
-    			<tr class="admin-simple-listing-row">
-    				<th scope="row">State</th>
+    			<tr class="kekahire-admin-simple-listing-row">
+    				<th scope="row"><?php _e( 'State', 'kekahire' ); ?></th>
 					<td>
     					<select id="kekahire-state-selector" multiple disabled>
 
     					</select>
     				</td>
     			</tr>
-    			<tr class="admin-simple-listing-row">
-    				<th scope="row">City</th>
+    			<tr class="kekahire-admin-simple-listing-row">
+    				<th scope="row"><?php _e( 'City', 'kekahire' ); ?></th>
 					<td>
     					<select id="kekahire-city-selector" multiple disabled>
 						
     					</select>
     				</td>
     			</tr>
-				<tr class="admin-smart-listing-row">
-    				<th scope="row">Hide Location/Department with no listing</th>
+				<tr class="kekahire-admin-smart-listing-row">
+    				<th scope="row"><?php _e( 'Hide Location/Department with no listing', 'kekahire' ); ?></th>
 					<td>
     					<input type="checkbox" id="kekahire-jobs-zero-listing" name="kekahire-jobs-zero-listing" value="1"></input>
     				</td>
     			</tr>
-				<tr class="admin-smart-listing-row">
-    				<th scope="row">Hide Count from Departments</th>
+				<tr class="kekahire-admin-smart-listing-row">
+    				<th scope="row"><?php _e( 'Hide Count from Departments', 'kekahire' ); ?></th>
 					<td>
     					<input type="checkbox" id="kekahire-jobs-hide-count" name="kekahire-jobs-hide-count" value="1"></input>
     				</td>
     			</tr>
-				<tr class="admin-smart-listing-row">
-    				<th scope="row">Default Department</th>
+				<tr class="kekahire-admin-smart-listing-row">
+    				<th scope="row"><?php _e( 'Default Department', 'kekahire' ); ?></th>
     				<td>
     					<select id="kekahire-default-department-selector">
 							<option value=""> - </option>
@@ -130,8 +130,8 @@
     					</select>
     				</td>
     			</tr>
-				<tr class="admin-smart-listing-row">
-    				<th scope="row">Default Location</th>
+				<tr class="kekahire-admin-smart-listing-row">
+    				<th scope="row"><?php _e( 'Default Location', 'kekahire' ); ?></th>
 					<td>
     					<select id="kekahire-default-location-selector">
 							<option value=""> - </option>
@@ -146,25 +146,25 @@
     				</td>
     			</tr>
 				<tr>
-    				<th scope="row">Exclude Jobs</th>
+    				<th scope="row"><?php _e( 'Exclude Jobs', 'kekahire' ); ?></th>
 					<td>
-    					<input type="text" id="kekahire-jobs-exclude" placeholder="Insert Job IDS">
+    					<input type="text" id="kekahire-jobs-exclude" placeholder="<?php _e( 'Insert Job IDS', 'kekahire' ); ?>">
     				</td>
     			</tr>
     		</tbody>
     	</table>
     </form>
    	<hr>
-	<table class="form-table">
+	<table class="kekahire-shortcode-view form-table">
 		<tbody>
 			<tr>
-				<th scope="row">Your Shortcode</th>
+				<th scope="row"><?php _e( 'Your Shortcode', 'kekahire' ); ?></th>
 				<td>
 					<div class="kekahire-shortcode-container">
 						<div id="kekahire-shortcode">[kekajobs]</div>
 					</div>
 					<div class="clear"></div>
-					<p class="description">Copy the above shortcode and then paste it anywhere on the website to show your desired listings from Keka.</p>
+					<p class="kekahire-shortcode-view-description"><?php _e( 'Copy the above shortcode and then paste it anywhere on the website to show your desired listings from Keka.', 'kekahire' ); ?></p>
 				</td>
 			</tr>
 		</tbody>

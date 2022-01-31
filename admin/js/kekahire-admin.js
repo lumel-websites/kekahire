@@ -69,8 +69,8 @@ $(document).ready(function(e){
 				city = null;
 				
 				
-				$('.admin-simple-listing-row').hide();
-				$('.admin-smart-listing-row').show();
+				$('.kekahire-admin-simple-listing-row').hide();
+				$('.kekahire-admin-smart-listing-row').show();
 			}
 			else {
 				$('#kekahire-jobs-zero-listing').prop('checked', false);
@@ -79,8 +79,8 @@ $(document).ready(function(e){
 				defaultdepartment = null;
 				defaultlocation = null;
 				
-				$('.admin-simple-listing-row').show();
-				$('.admin-smart-listing-row').hide();
+				$('.kekahire-admin-simple-listing-row').show();
+				$('.kekahire-admin-smart-listing-row').hide();
 			}
 
 	 		var shortcode = '[kekajobs';
@@ -189,7 +189,7 @@ $(document).ready(function(e){
 			$.ajax({
 				type: "POST",
 				dataType: "html",
-				url: WM_OBJECT.ajaxurl,
+				url: KH_OBJECT.ajaxurl,
 				data: str,
 				success: (data) => {
 					var $data = $(data);
@@ -213,7 +213,7 @@ $(document).ready(function(e){
 			$.ajax({
 				type: "POST",
 				dataType: "html",
-				url: WM_OBJECT.ajaxurl,
+				url: KH_OBJECT.ajaxurl,
 				data: str,
 				success: (data) => {
 					var $data = $(data);
@@ -227,6 +227,9 @@ $(document).ready(function(e){
 			});
 			return false;
 		});
+		
+		//Initialize Color Picker
+		$('.kekahire-my-color-field').wpColorPicker();
 
 	 });
 
