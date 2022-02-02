@@ -74,6 +74,14 @@ class Kekahire_Public {
 		 */
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/kekahire-public.css', array(), $this->version, 'all' );
+		
+		/**
+		 * Include Select2 CSS.
+		 *
+		 * @since    1.0.0
+		 */
+
+		wp_enqueue_style( $this->plugin_name . '-select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css', array(), '4.0.13', 'all' );
 
 	}
 
@@ -97,6 +105,15 @@ class Kekahire_Public {
 		 */
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/kekahire-public.js', array( 'jquery' ), $this->version, false );
+		
+		/**
+		 * Include Select2 JS.
+		 *
+		 * @since    1.0.0
+		 */
+
+		wp_enqueue_script( $this->plugin_name . '-select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js', array( 'jquery' ), '4.0.13', false );
+		
 
 	}
 	
@@ -211,9 +228,11 @@ class Kekahire_Public {
 		<div class="kekahire-smart-listing-container" data-department="<?php echo $atts[ 'defaultdepartment' ]; ?>" data-location="<?php echo $atts[ 'defaultlocation' ]; ?>">
 			<div class="kekahire-location-selector-wrapper">
 				<div class="kekahire-location-selector">
-					<span class="">Select Location</span>
-					<select>
-						<option value="">All</option>
+					<label for="kekahire-location-selector-select" class="kekahire-location-selector-title">
+						<?php _e( 'Select Location', 'kekahire' ); ?>
+					</label>
+					<select id="kekahire-location-selector-select">
+						<option value=""><?php _e( 'All', 'kekahire' ); ?></option>
 						<?php
 						foreach ( $locations as $location ) {
 							
@@ -241,8 +260,10 @@ class Kekahire_Public {
 				</div>
 				
 				<div class="kekahire-department-selector">
-					<span class=""><?php _e( 'Select Department', 'kekahire' ); ?></span>
-					<select>
+					<label class="kekahire-department-selector-title">
+						<?php _e( 'Select Department', 'kekahire' ); ?>
+					</label>
+					<select id="kekahire-department-selector-select">
 						<option value=""><?php _e( 'All', 'kekahire' ); ?></option>
 						<?php						
 						foreach ( $departments as $department ) {

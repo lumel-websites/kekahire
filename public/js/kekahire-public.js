@@ -30,6 +30,16 @@
 	 */
 	 
 	$(window).load(function(e){
+		
+		var selectConfig = { 
+	 		width:"320px",
+			height:"60px",
+	 		minimumResultsForSearch:10
+	 	};
+
+		$('#kekahire-location-selector-select').select2( selectConfig );
+		$('#kekahire-department-selector-select').select2( selectConfig );
+		
 		var loadlisting = function(){
 			
 			var departmentId = $(".kekahire-smart-listing-container").attr("data-department");
