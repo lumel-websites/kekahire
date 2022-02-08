@@ -60,17 +60,29 @@ $(document).ready(function(e){
 			var hidecount	= $('#kekahire-jobs-hide-count').val();
 			var defaultdepartment	= $('#kekahire-default-department-selector').val();
 			var defaultlocation	= $('#kekahire-default-location-selector').val();
+			var itemsinrow	= $('#kekahire-itemsinrow-selector').val();
 			var exclude		= $('#kekahire-jobs-exclude').val();
 			
-			if(listing != "simple") {
+			if(listing == "smart") {
+				departments = null;
+				country = null;
+				state = null;
+				city = null;
+				itemsinrow = null;
+				
+				$('.kekahire-admin-simple-listing-row').hide();
+				$('.kekahire-admin-smart-listing-row').show();
+				$('.kekahire-admin-grid-listing-row').hide();
+			}
+			else if(listing == "grid") {
 				departments = null;
 				country = null;
 				state = null;
 				city = null;
 				
-				
 				$('.kekahire-admin-simple-listing-row').hide();
 				$('.kekahire-admin-smart-listing-row').show();
+				$('.kekahire-admin-grid-listing-row').show();
 			}
 			else {
 				$('#kekahire-jobs-zero-listing').prop('checked', false);
@@ -81,6 +93,7 @@ $(document).ready(function(e){
 				
 				$('.kekahire-admin-simple-listing-row').show();
 				$('.kekahire-admin-smart-listing-row').hide();
+				$('.kekahire-admin-grid-listing-row').hide();
 			}
 
 	 		var shortcode = '[kekajobs';
@@ -113,6 +126,10 @@ $(document).ready(function(e){
 			
 			if( defaultlocation == null ) {
 	 			defaultlocation = "";
+	 		}
+			
+			if( itemsinrow == null ) {
+	 			itemsinrow = "";
 	 		}
 
 	 		if( title !== '' ){
@@ -155,6 +172,10 @@ $(document).ready(function(e){
 	 			shortcode += ' defaultlocation="' + defaultlocation + '"';	
 	 		}
 			
+			if( itemsinrow !== '' ){
+	 			shortcode += ' itemsinrow="' + itemsinrow + '"';	
+	 		}
+			
 			if( exclude !== '' ){
 	 			shortcode += ' excludejobs="' + exclude + '"';	
 	 		}
@@ -174,6 +195,7 @@ $(document).ready(function(e){
 		$('#kekahire-jobs-hide-count').change( buildShortcode );
 		$('#kekahire-default-department-selector').change( buildShortcode );
 		$('#kekahire-default-location-selector').change( buildShortcode );
+		$('#kekahire-itemsinrow-selector').change( buildShortcode );
 		$('#kekahire-jobs-exclude').keyup( buildShortcode );
 		
 		//State/City Fetch

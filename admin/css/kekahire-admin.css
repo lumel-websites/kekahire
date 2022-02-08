@@ -3,6 +3,7 @@
  * included in this file.
  */
  
-.kekahire-admin-smart-listing-row {
+.kekahire-admin-smart-listing-row,
+.kekahire-admin-grid-listing-row {
 	display: none;
 }

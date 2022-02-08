@@ -42,8 +42,8 @@
 		
 		var loadlisting = function(){
 			
-			var departmentId = $(".kekahire-smart-listing-container").attr("data-department");
-			var city         = $(".kekahire-smart-listing-container").attr("data-location");
+			var departmentId = $(".kekahire-data-fetch").attr("data-department");
+			var city         = $(".kekahire-data-fetch").attr("data-location");
 
 			if( departmentId == "" && city == "" ) {
 				$(".kekahire-listing").show();
@@ -68,7 +68,7 @@
 		loadlisting();
 		
 		$('.kekahire-sidebar-wrapper li').click( function() { 
-			$(".kekahire-smart-listing-container").attr("data-department",$(this).attr("data-value"));
+			$(".kekahire-data-fetch").attr("data-department",$(this).attr("data-value"));
 			loadlisting();
 			
 			$(".kekahire-sidebar-wrapper li").removeClass("selected");
@@ -76,12 +76,12 @@
 		});
 		
 		$('.kekahire-department-selector select').change( function() { 
-			$(".kekahire-smart-listing-container").attr("data-department",$(this).val());
+			$(".kekahire-data-fetch").attr("data-department",$(this).val());
 			loadlisting();
 		});
 		
 		$('.kekahire-location-selector select').change( function() { 
-			$(".kekahire-smart-listing-container").attr("data-location",$(this).val());
+			$(".kekahire-data-fetch").attr("data-location",$(this).val());
 			loadlisting();
 		});
 		
