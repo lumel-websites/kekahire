@@ -158,6 +158,12 @@ class Kekahire_Public {
 		
 		$kekahire_subdomain = get_option( 'kekahire_subdomain' );
 		
+		if( $kekahire_subdomain == "" ) {
+			
+			return false;
+		
+		}
+		
 		$kekahire_color = get_option( 'kekahire_color' );
 		$kekahire_button_bg = get_option( 'kekahire_button_bg' );
 		$kekahire_button_color = get_option( 'kekahire_button_color' );
@@ -240,6 +246,7 @@ class Kekahire_Public {
 		if($listingtype == "smart") {
 		
 		?>
+		
 		<div class="kekahire-smart-listing-container kekahire-data-fetch" data-department="<?php echo $atts[ 'defaultdepartment' ]; ?>" data-location="<?php echo $atts[ 'defaultlocation' ]; ?>">
 			
 			<div class="kekahire-location-selector-wrapper">
@@ -257,6 +264,7 @@ class Kekahire_Public {
 						<option value=""><?php _e( 'All', 'kekahire' ); ?></option>
 						
 						<?php
+						
 						foreach ( $locations as $location ) {
 							
 							$locationcount = '';
@@ -288,6 +296,7 @@ class Kekahire_Public {
 							}
 							
 						}
+						
 						?>
 					
 					</select>
@@ -339,6 +348,7 @@ class Kekahire_Public {
 							} 
 
 						}
+						
 						?>
 						
 					</select>
@@ -398,7 +408,9 @@ class Kekahire_Public {
 				</div>
 				
 				<div class="kekahire-listing-wrapper">
+					
 					<?php
+					
 					foreach ( $listings as $listing ) {
 						
 						$listing_passed = true;
@@ -420,6 +432,7 @@ class Kekahire_Public {
 						}
 						
 						if( $listing_passed ) {
+						
 						?>
 						
 						<div class="kekahire-listing" data-departmentId="<?php echo $listing['departmentId']; ?>" data-city="<?php echo $listing['jobLocations'][0]['city']; ?>">
@@ -455,13 +468,15 @@ class Kekahire_Public {
 		</div>
 		
 		<?php 
+		
 		} 
 		
 		//Listing Type - Grid
 		
-		else if($listingtype == "grid") {
+		else if( $listingtype == "grid" ) {
 		
 		?>
+		
 		<div class="kekahire-grid-listing-container kekahire-data-fetch" data-department="<?php echo $atts[ 'defaultdepartment' ]; ?>" data-location="<?php echo $atts[ 'defaultlocation' ]; ?>">
 			
 			<div class="kekahire-location-selector-wrapper">
@@ -479,6 +494,7 @@ class Kekahire_Public {
 						<option value=""><?php _e( 'All', 'kekahire' ); ?></option>
 						
 						<?php
+						
 						foreach ( $locations as $location ) {
 							
 							$locationcount = '';
@@ -510,6 +526,7 @@ class Kekahire_Public {
 							}
 							
 						}
+						
 						?>
 						
 					</select>
@@ -527,28 +544,41 @@ class Kekahire_Public {
 					<select id="kekahire-department-selector-select">
 						
 						<option value=""><?php _e( 'All', 'kekahire' ); ?></option>
+						
 						<?php						
+						
 						foreach ( $departments as $department ) {
 							
 							$departmentcount = '';
+							
 							if($atts[ 'hidecount' ] != 1) {
+								
 								$departmentcount = ' ('.$departmentcountarray[$department[ 'id' ]]['count'].')';
+							
 							}
 							
 							$defaultdepartment = '';
+							
 							if($atts[ 'defaultdepartment' ] == $department[ 'id' ]) {
+								
 								$defaultdepartment = ' selected';
+							
 							}
 							
-							if($departmentcountarray[$department[ 'id' ]]['count'] > 0)
-							{
+							if($departmentcountarray[$department[ 'id' ]]['count'] > 0) {
+								
 								echo '<option value="' . $department[ 'id' ] . '"'.$defaultdepartment.' />' . $department[ 'name' ] .$departmentcount;
+							
 							}
+							
 							else if($atts[ 'zerolisting' ] != 1) {
+								
 								echo '<option value="' . $department[ 'id' ] . '"'.$defaultdepartment.' />' . $department[ 'name' ];
+							
 							} 
 
 						}
+						
 						?>
 						
 					</select>
@@ -560,7 +590,9 @@ class Kekahire_Public {
 			<div class="kekahire-sidebar-listing-wrapper">
 				
 				<div class="kekahire-listing-wrapper">
+				
 					<?php
+					
 					foreach ( $listings as $listing ) {
 						
 						$listing_passed = true;
@@ -582,6 +614,7 @@ class Kekahire_Public {
 						}
 						
 						if( $listing_passed ) {
+							
 						?>
 						
 						<div class="kekahire-listing kekahire-col-default-<?php echo $atts[ 'itemsinrow' ]; ?>" data-departmentId="<?php echo $listing['departmentId']; ?>" data-city="<?php echo $listing['jobLocations'][0]['city']; ?>">
@@ -629,7 +662,9 @@ class Kekahire_Public {
 		else { 
 		
 		?>
+		
 		<div class="kekahire-simple-listings-container">
+		
 			<?php 
 
 			if( $atts[ 'title' ] !== "" ) {
@@ -637,8 +672,11 @@ class Kekahire_Public {
 				echo '<h4><strong>' . $atts[ 'title' ] . '</strong></h4>';
 
 			}
+			
 			?>
+			
 			<ul class="kekahire-listings">
+			
 				<?php
 
 				foreach ( $listings as $listing ) {

@@ -198,6 +198,30 @@ $(document).ready(function(e){
 		$('#kekahire-itemsinrow-selector').change( buildShortcode );
 		$('#kekahire-jobs-exclude').keyup( buildShortcode );
 		
+		$("#kekahire-state-selector").on("change",function(){ 
+			$("#kekahire-city-selector").html("");
+			$("#kekahire-city-selector").prop('disabled', true);
+			
+			var state = $(this).val();
+			var str = '&state=' + state + '&action=kekahire_load_state_city_ajax';
+			$.ajax({
+				type: "POST",
+				dataType: "html",
+				url: KH_OBJECT.ajaxurl,
+				data: str,
+				success: (data) => {
+					var $data = $(data);
+					if($data.length){
+						$("#kekahire-city-selector").append($data);
+						
+						$("#kekahire-city-selector").prop('disabled', false);
+					}
+				}
+
+			});
+			return false;
+		});
+		
 		//State/City Fetch
 		$("#kekahire-location-selector").on("change",function(){
 			$("#kekahire-state-selector").html("");
@@ -219,30 +243,6 @@ $(document).ready(function(e){
 						$("#kekahire-state-selector").append($data);
 						
 						$("#kekahire-state-selector").prop('disabled', false);
-					}
-				}
-
-			});
-			return false;
-		});
-		
-		$("#kekahire-state-selector").on("change",function(){ 
-			$("#kekahire-city-selector").html("");
-			$("#kekahire-city-selector").prop('disabled', true);
-			
-			var state = $(this).val();
-			var str = '&state=' + state + '&action=kekahire_load_state_city_ajax';
-			$.ajax({
-				type: "POST",
-				dataType: "html",
-				url: KH_OBJECT.ajaxurl,
-				data: str,
-				success: (data) => {
-					var $data = $(data);
-					if($data.length){
-						$("#kekahire-city-selector").append($data);
-						
-						$("#kekahire-city-selector").prop('disabled', false);
 					}
 				}
 
