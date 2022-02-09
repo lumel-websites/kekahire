@@ -115,9 +115,13 @@ class Kekahire_Admin {
 		 * @since    1.0.0
 		 */
 		wp_localize_script( $this->plugin_name, 'KH_OBJECT',
+			
 			array( 
+				
 				'ajaxurl' => admin_url( 'admin-ajax.php' ),
+			
 			)
+		
 		);
 		
 		/**
@@ -137,6 +141,7 @@ class Kekahire_Admin {
 		 * @since    1.0.0
 		 */
 		wp_enqueue_style( 'wp-color-picker' );
+		
 		wp_enqueue_script( 'my-script-handle', plugins_url('my-script.js', __FILE__ ), array( 'wp-color-picker' ), false, true );
 
 	}
@@ -160,14 +165,21 @@ class Kekahire_Admin {
 	public function kekahire_settings_page() {
 
 		$kekahire_subdomain = get_option( 'kekahire_subdomain' );
+		
+		if($kekahire_subdomain !== "" ) {
+			
+			$kekahire_dept_payload = wp_remote_get( "https://$kekahire_subdomain.kekahire.com/api/organization/departments/" );
+			
+			$kekahire_location_payload = wp_remote_get( "https://$kekahire_subdomain.kekahire.com/api/organization/locations/" );
 
-		$kekahire_dept_payload = wp_remote_get( "https://$kekahire_subdomain.kekahire.com/api/organization/departments/" );
-		$kekahire_location_payload = wp_remote_get( "https://$kekahire_subdomain.kekahire.com/api/organization/locations/" );
-
-		$departments = json_decode( $kekahire_dept_payload[ 'body' ] , true );
-		$locations = json_decode( $kekahire_location_payload[ 'body' ] , true );
+			$departments = json_decode( $kekahire_dept_payload[ 'body' ] , true );
+			
+			$locations = json_decode( $kekahire_location_payload[ 'body' ] , true );
+		
+		}
 		
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-kekahire-countries.php';
+		
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/kekahire-admin-display.php';
 
 	}
@@ -330,10 +342,13 @@ class Kekahire_Admin {
 	public function kekahire_load_state_city_ajax(){
 		
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-kekahire-countries.php';
+		
 		$classObject = new CB_Countries();
+		
 		$statesname = $classObject->get_states();
 
 		$country = $_POST["country"];
+		
 		$state = explode(",",$_POST["state"]);
 
 		header("Content-Type: text/html");
@@ -341,22 +356,32 @@ class Kekahire_Admin {
 		$output = '';
 		
 		$kekahire_subdomain = get_option( 'kekahire_subdomain' );
+		
 		$kekahire_location_payload = wp_remote_get( "https://$kekahire_subdomain.kekahire.com/api/organization/locations/" );
+		
 		$locations = json_decode( $kekahire_location_payload[ 'body' ] , true );
 		
 		if($country) {
+			
 			foreach ( $locations as $location ) {
+				
 				if($country == $location['address'][ 'countryCode' ]) {
+					
 					$output .= '<option value="' . $location['address'][ 'state' ] . '">' . $statesname[$location['address'][ 'countryCode' ]][$location['address'][ 'state' ]] . '</option>'; 
+				
 				}
 
 			}
 		}
 		
 		if($state) {
+			
 			foreach ( $locations as $location ) {
+				
 				if(in_array($location['address'][ 'state' ],$state)) {
+					
 					$output .= '<option value="' . $location['address'][ 'city' ] . '">' . $location['address'][ 'city' ] . '</option>'; 
+				
 				}
 
 			}

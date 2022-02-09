@@ -147,6 +147,7 @@ class Kekahire_Public {
 				'hidecount' => '',
 				'defaultdepartment' => '',
 				'defaultlocation' => '',
+				'itemsinrow' => '',
 				'excludejobs' => '',
 			), 
 			$atts, 
@@ -174,6 +175,7 @@ class Kekahire_Public {
 		ob_start();
 
 		$locationcountarray = array();
+		
 		$departmentcountarray = array();
 		
 		$departmentcounter = 0;
@@ -199,13 +201,21 @@ class Kekahire_Public {
 			}
 			
 			if( $listing_passed ) {
+				
 				if($listing['jobLocations'][0]['city']!='') {
+					
 					$locationcountarray[$listing['jobLocations'][0]['city']]['count']++;
+				
 				}
+				
 				if($listing['departmentId']!='') {
+					
 					$departmentcountarray[$listing['departmentId']]['count']++;
+				
 				}
+			
 			} 
+		
 		}
 		?>
 		<style>
@@ -222,48 +232,300 @@ class Kekahire_Public {
 			color: <?php echo $kekahire_button_hover_color; ?>;
 		}
 		</style>
+		
 		<?php
+		
+		//Listing Type - Smart
+		
 		if($listingtype == "smart") {
+		
 		?>
-		<div class="kekahire-smart-listing-container" data-department="<?php echo $atts[ 'defaultdepartment' ]; ?>" data-location="<?php echo $atts[ 'defaultlocation' ]; ?>">
+		<div class="kekahire-smart-listing-container kekahire-data-fetch" data-department="<?php echo $atts[ 'defaultdepartment' ]; ?>" data-location="<?php echo $atts[ 'defaultlocation' ]; ?>">
+			
 			<div class="kekahire-location-selector-wrapper">
+				
 				<div class="kekahire-location-selector">
+					
 					<label for="kekahire-location-selector-select" class="kekahire-location-selector-title">
+						
 						<?php _e( 'Select Location', 'kekahire' ); ?>
+					
 					</label>
+					
 					<select id="kekahire-location-selector-select">
+						
 						<option value=""><?php _e( 'All', 'kekahire' ); ?></option>
+						
 						<?php
 						foreach ( $locations as $location ) {
 							
 							$locationcount = '';
+							
 							if($atts[ 'hidecount' ] != 1) {
+								
 								$locationcount = ' ('.$locationcountarray[$location['address'][ 'city' ]]['count'].')';
+							
 							}
 							
 							$defaultlocation = '';
+							
 							if($atts[ 'defaultlocation' ] == $location['address'][ 'city' ]) {
+								
 								$defaultlocation = ' selected';
+							
 							}
 							
-							if($locationcountarray[$location['address'][ 'city' ]]['count'] > 0)
-							{
+							if($locationcountarray[$location['address'][ 'city' ]]['count'] > 0) {
+								
 								echo '<option value="' . $location['address'][ 'city' ] . '"'.$defaultlocation.' />' . $location['address'][ 'city' ]. ',' . $location['address'][ 'countryCode' ] .$locationcount; 
+							
 							}
+							
 							else if($atts[ 'zerolisting' ] != 1) {
+								
 								echo '<option value="' . $location['address'][ 'city' ] . '"'.$defaultlocation.' />' . $location['address'][ 'city' ]. ',' . $location['address'][ 'countryCode' ]; 
+							
 							}
 							
 						}
 						?>
+					
 					</select>
+				
 				</div>
 				
 				<div class="kekahire-department-selector">
+					
 					<label class="kekahire-department-selector-title">
+						
 						<?php _e( 'Select Department', 'kekahire' ); ?>
+					
 					</label>
+					
 					<select id="kekahire-department-selector-select">
+						
+						<option value=""><?php _e( 'All', 'kekahire' ); ?></option>
+						
+						<?php						
+						
+						foreach ( $departments as $department ) {
+							
+							$departmentcount = '';
+							
+							if($atts[ 'hidecount' ] != 1) {
+								
+								$departmentcount = ' ('.$departmentcountarray[$department[ 'id' ]]['count'].')';
+							
+							}
+							
+							$defaultdepartment = '';
+							
+							if($atts[ 'defaultdepartment' ] == $department[ 'id' ]) {
+								
+								$defaultdepartment = ' selected';
+							
+							}
+							
+							if($departmentcountarray[$department[ 'id' ]]['count'] > 0) {
+								
+								echo '<option value="' . $department[ 'id' ] . '"'.$defaultdepartment.' />' . $department[ 'name' ] .$departmentcount;
+							
+							}
+							
+							else if($atts[ 'zerolisting' ] != 1) {
+								
+								echo '<option value="' . $department[ 'id' ] . '"'.$defaultdepartment.' />' . $department[ 'name' ];
+							
+							} 
+
+						}
+						?>
+						
+					</select>
+				
+				</div>
+			
+			</div>
+			
+			<div class="kekahire-sidebar-listing-wrapper">
+				
+				<h4><?php _e( 'Departments', 'kekahire' ); ?></h4>
+				
+				<div class="kekahire-sidebar-wrapper">
+					
+					<ul>
+						
+						<li <?php if($atts[ 'defaultdepartment' ] == '') {?>class="selected"<?php } ?> data-value=""><span><?php _e( 'All', 'kekahire' ); ?></span></li>
+						
+						<?php							
+						
+						foreach ( $departments as $department ) {
+							
+							$departmentcount = '';
+							
+							if($atts[ 'hidecount' ] != 1) {
+								
+								$departmentcount = ' ('.$departmentcountarray[$department[ 'id' ]]['count'].')';
+							
+							}
+							
+							$defaultdepartment = '';
+							
+							if($atts[ 'defaultdepartment' ] == $department[ 'id' ]) {
+								
+								$defaultdepartment = ' class="selected"';
+							
+							}
+							
+							if($departmentcountarray[$department[ 'id' ]]['count'] > 0) {
+								
+								echo '<li'.$defaultdepartment.' data-value="' . $department[ 'id' ] . '"><span>' . $department[ 'name' ] .$departmentcount.'</span></li>';
+							
+							}
+							
+							else if($atts[ 'zerolisting' ] != 1) {
+								
+								echo '<li'.$defaultdepartment.' data-value="' . $department[ 'id' ] . '"><span>' . $department[ 'name' ] .'</span></li>';
+							
+							} 
+
+						}
+
+						?>
+					
+					</ul>
+				
+				</div>
+				
+				<div class="kekahire-listing-wrapper">
+					<?php
+					foreach ( $listings as $listing ) {
+						
+						$listing_passed = true;
+						
+						if( $atts[ 'excludejobs' ] !== "" ) {
+							
+							$excludejobs = explode(",", $atts[ 'excludejobs' ] );
+					
+							foreach ( $excludejobs as $excludejob ) {
+
+								if( $excludejob == $listing[ 'id' ] ) {
+
+									$listing_passed = false;
+
+								}
+
+							}
+
+						}
+						
+						if( $listing_passed ) {
+						?>
+						
+						<div class="kekahire-listing" data-departmentId="<?php echo $listing['departmentId']; ?>" data-city="<?php echo $listing['jobLocations'][0]['city']; ?>">
+							
+							<div class="kekahire-listing-title-wrapper">
+								
+								<h3><?php echo $listing['title']; ?></h3>
+								
+								<?php if($listing['jobLocations'][0]['city']!="" && $listing['jobLocations'][0]['countryName']!="") { ?>
+								
+								<span><?php echo $listing['jobLocations'][0]['city']; ?>,<?php echo $listing['jobLocations'][0]['countryName']; ?></span>
+								
+								<?php } ?>
+							
+							</div>
+							
+							<div class="kekahire-listing-button-wrapper">
+								
+								<a href="https://<?php echo $kekahire_subdomain; ?>.kekahire.com/jobdetails/<?php echo $listing['id']; ?>/" target="_blank" class="kekahire-apply-button">Apply Now</a>
+							
+							</div>
+						
+						</div>
+						
+						<?php } ?>
+					
+					<?php } ?>
+				
+				</div>
+			
+			</div>
+		
+		</div>
+		
+		<?php 
+		} 
+		
+		//Listing Type - Grid
+		
+		else if($listingtype == "grid") {
+		
+		?>
+		<div class="kekahire-grid-listing-container kekahire-data-fetch" data-department="<?php echo $atts[ 'defaultdepartment' ]; ?>" data-location="<?php echo $atts[ 'defaultlocation' ]; ?>">
+			
+			<div class="kekahire-location-selector-wrapper">
+				
+				<div class="kekahire-location-selector">
+					
+					<label for="kekahire-location-selector-select" class="kekahire-location-selector-title">
+						
+						<?php _e( 'Select Location', 'kekahire' ); ?>
+					
+					</label>
+					
+					<select id="kekahire-location-selector-select">
+						
+						<option value=""><?php _e( 'All', 'kekahire' ); ?></option>
+						
+						<?php
+						foreach ( $locations as $location ) {
+							
+							$locationcount = '';
+							
+							if($atts[ 'hidecount' ] != 1) {
+								
+								$locationcount = ' ('.$locationcountarray[$location['address'][ 'city' ]]['count'].')';
+							
+							}
+							
+							$defaultlocation = '';
+							
+							if($atts[ 'defaultlocation' ] == $location['address'][ 'city' ]) {
+								
+								$defaultlocation = ' selected';
+							
+							}
+							
+							if($locationcountarray[$location['address'][ 'city' ]]['count'] > 0) {
+								
+								echo '<option value="' . $location['address'][ 'city' ] . '"'.$defaultlocation.' />' . $location['address'][ 'city' ]. ',' . $location['address'][ 'countryCode' ] .$locationcount; 
+							
+							}
+							
+							else if($atts[ 'zerolisting' ] != 1) {
+								
+								echo '<option value="' . $location['address'][ 'city' ] . '"'.$defaultlocation.' />' . $location['address'][ 'city' ]. ',' . $location['address'][ 'countryCode' ]; 
+							
+							}
+							
+						}
+						?>
+						
+					</select>
+					
+				</div>
+				
+				<div class="kekahire-department-selector">
+					
+					<label class="kekahire-department-selector-title">
+						
+						<?php _e( 'Select Department', 'kekahire' ); ?>
+					
+					</label>
+					
+					<select id="kekahire-department-selector-select">
+						
 						<option value=""><?php _e( 'All', 'kekahire' ); ?></option>
 						<?php						
 						foreach ( $departments as $department ) {
@@ -290,39 +552,13 @@ class Kekahire_Public {
 						?>
 						
 					</select>
+				
 				</div>
+			
 			</div>
+			
 			<div class="kekahire-sidebar-listing-wrapper">
-				<h4><?php _e( 'Departments', 'kekahire' ); ?></h4>
-				<div class="kekahire-sidebar-wrapper">
-					<ul>
-						<li <?php if($atts[ 'defaultdepartment' ] == '') {?>class="selected"<?php } ?> data-value=""><span><?php _e( 'All', 'kekahire' ); ?></span></li>
-						<?php							
-						foreach ( $departments as $department ) {
-							
-							$departmentcount = '';
-							if($atts[ 'hidecount' ] != 1) {
-								$departmentcount = ' ('.$departmentcountarray[$department[ 'id' ]]['count'].')';
-							}
-							
-							$defaultdepartment = '';
-							if($atts[ 'defaultdepartment' ] == $department[ 'id' ]) {
-								$defaultdepartment = ' class="selected"';
-							}
-							
-							if($departmentcountarray[$department[ 'id' ]]['count'] > 0)
-							{
-								echo '<li'.$defaultdepartment.' data-value="' . $department[ 'id' ] . '"><span>' . $department[ 'name' ] .$departmentcount.'</span></li>';
-							}
-							else if($atts[ 'zerolisting' ] != 1) {
-								echo '<li'.$defaultdepartment.' data-value="' . $department[ 'id' ] . '"><span>' . $department[ 'name' ] .'</span></li>';
-							} 
-
-						}
-
-						?>
-					</ul>
-				</div>
+				
 				<div class="kekahire-listing-wrapper">
 					<?php
 					foreach ( $listings as $listing ) {
@@ -347,23 +583,52 @@ class Kekahire_Public {
 						
 						if( $listing_passed ) {
 						?>
-						<div class="kekahire-listing" data-departmentId="<?php echo $listing['departmentId']; ?>" data-city="<?php echo $listing['jobLocations'][0]['city']; ?>">
-							<div class="kekahire-listing-title-wrapper">
-								<h3><?php echo $listing['title']; ?></h3>
-								<span><?php echo $listing['jobLocations'][0]['city']; ?>,<?php echo $listing['jobLocations'][0]['countryName']; ?></span>
+						
+						<div class="kekahire-listing kekahire-col-default-<?php echo $atts[ 'itemsinrow' ]; ?>" data-departmentId="<?php echo $listing['departmentId']; ?>" data-city="<?php echo $listing['jobLocations'][0]['city']; ?>">
+							
+							<div class="kekahire-listing-container">
+								
+								<div class="kekahire-listing-title-wrapper">
+									
+									<h3><?php echo $listing['title']; ?></h3>
+								
+								</div>
+								
+								<div class="kekahire-listing-button-wrapper">
+									
+									<?php if($listing['jobLocations'][0]['city']!="" && $listing['jobLocations'][0]['countryName']!="") { ?>
+									
+									<span><?php echo $listing['jobLocations'][0]['city']; ?>,<?php echo $listing['jobLocations'][0]['countryName']; ?></span>
+									
+									<?php } ?>
+									
+									<a href="https://<?php echo $kekahire_subdomain; ?>.kekahire.com/jobdetails/<?php echo $listing['id']; ?>/" target="_blank" class="kekahire-apply-button">Apply Now</a>
+								
+								</div>
+							
 							</div>
-							<div class="kekahire-listing-button-wrapper">
-								<a href="https://<?php echo $kekahire_subdomain; ?>.kekahire.com/jobdetails/<?php echo $listing['id']; ?>/" target="_blank" class="kekahire-apply-button">Apply Now</a>
-							</div>
+						
 						</div>
+						
 						<?php } ?>
+					
 					<?php } ?>
+				
 				</div>
+			
 			</div>
+		
 		</div>
-		<?php 
-		} else { ?>
-
+		
+		<?php
+		
+		}
+		
+		//Listing Type - Simple
+		
+		else { 
+		
+		?>
 		<div class="kekahire-simple-listings-container">
 			<?php 
 
@@ -453,8 +718,11 @@ class Kekahire_Public {
 				}
 
 				?>
+			
 			</ul>
+		
 		</div>
+		
 		<?php } ?>
 		
 		<?php
