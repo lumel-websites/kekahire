@@ -1,0 +1,9 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+ 
+.kekahire-admin-smart-listing-row,
+.kekahire-admin-grid-listing-row {
+	display: none;
+}
