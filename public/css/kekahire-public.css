@@ -75,6 +75,7 @@
   margin-bottom: 30px;
   display: inline-block;
   width: 100%;
+  min-height: 60px;
 }
 .kekahire-smart-listing-container .kekahire-listing-title-wrapper {
   float: left;
