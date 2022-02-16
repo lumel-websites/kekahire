@@ -221,13 +221,21 @@
     			
 				</tr>
 				
+				<tr class="kekahire-admin-smart-listing-row">
+    				
+					<th scope="row"><?php _e( 'Pagination', 'kekahire' ); ?></th>
+    				
+					<td><input type="text" id="kekahire-items" placeholder="Pagination"></td>
+    			
+				</tr>
+				
 				<tr class="kekahire-admin-grid-listing-row">
     				
 					<th scope="row"><?php _e( 'Number of items in a row', 'kekahire' ); ?></th>
 					
 					<td>
     					
-						<select id="kekahire-itemsinrow-selector">
+						<select id="kekahire-columnspage">
 							<option value="2"> 2 </option>
 							<option value="3"> 3 </option>
 							<option value="4"> 4 </option>
