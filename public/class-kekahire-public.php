@@ -107,6 +107,21 @@ class Kekahire_Public {
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/kekahire-public.js', array( 'jquery' ), $this->version, false );
 		
 		/**
+		 * Localize script.
+		 *
+		 * @since    1.0.0
+		 */
+		wp_localize_script( $this->plugin_name, 'KH_OBJECT',
+			
+			array( 
+				
+				'ajaxurl' => admin_url( 'admin-ajax.php' ),
+			
+			)
+		
+		);
+		
+		/**
 		 * Include Select2 JS.
 		 *
 		 * @since    1.0.0
@@ -147,12 +162,15 @@ class Kekahire_Public {
 				'hidecount' => '',
 				'defaultdepartment' => '',
 				'defaultlocation' => '',
-				'itemsinrow' => '',
+				'items' => '',
+				'columnspage' => '',
 				'excludejobs' => '',
 			), 
 			$atts, 
 			'kekajobs' 
 		);
+		
+		ob_start();
 		
 		$listingtype = $atts[ 'listing' ];
 		
@@ -164,27 +182,33 @@ class Kekahire_Public {
 		
 		}
 		
-		$kekahire_color = get_option( 'kekahire_color' );
-		$kekahire_button_bg = get_option( 'kekahire_button_bg' );
-		$kekahire_button_color = get_option( 'kekahire_button_color' );
-		$kekahire_button_hover_bg = get_option( 'kekahire_button_hover_bg' );
+		$kekahire_color              = get_option( 'kekahire_color' );
+		$kekahire_button_bg          = get_option( 'kekahire_button_bg' );
+		$kekahire_button_color       = get_option( 'kekahire_button_color' );
+		$kekahire_button_hover_bg    = get_option( 'kekahire_button_hover_bg' );
 		$kekahire_button_hover_color = get_option( 'kekahire_button_hover_color' );
 
-		$kekahire_dept_payload = wp_remote_get( "https://$kekahire_subdomain.kekahire.com/api/organization/departments/" );
-		$kekahire_location_payload = wp_remote_get( "https://$kekahire_subdomain.kekahire.com/api/organization/locations/" );
-		$kekahire_listings_payload = wp_remote_get( "https://$kekahire_subdomain.kekahire.com/api/jobs/active/" );
+		$kekahire_dept_payload       = wp_remote_get( "https://$kekahire_subdomain.kekahire.com/api/organization/departments/" );
+		$kekahire_location_payload   = wp_remote_get( "https://$kekahire_subdomain.kekahire.com/api/organization/locations/" );
+		$kekahire_listings_payload   = wp_remote_get( "https://$kekahire_subdomain.kekahire.com/api/jobs/active/" );
+		
+		$departments                 = json_decode( $kekahire_dept_payload[ 'body' ] , true );
+		$locations                   = json_decode( $kekahire_location_payload[ 'body' ] , true );
+		$listings                    = json_decode( $kekahire_listings_payload[ 'body' ] , true );
+		
+		if( $listings['message'] == "An error has occurred." ) {
+			
+			return false;
+		
+		}
 
-		$departments = json_decode( $kekahire_dept_payload[ 'body' ] , true );
-		$locations = json_decode( $kekahire_location_payload[ 'body' ] , true );
-		$listings = json_decode( $kekahire_listings_payload[ 'body' ] , true );
-
-		ob_start();
-
-		$locationcountarray = array();
+		$locationcountarray   = array();
 		
 		$departmentcountarray = array();
 		
-		$departmentcounter = 0;
+		$listingcount         = 0;
+		
+		$departmentcounter    = 0;
 		
 		foreach ( $listings as $listing ) {
 			
@@ -247,7 +271,7 @@ class Kekahire_Public {
 		
 		?>
 		
-		<div class="kekahire-smart-listing-container kekahire-data-fetch" data-department="<?php echo $atts[ 'defaultdepartment' ]; ?>" data-location="<?php echo $atts[ 'defaultlocation' ]; ?>">
+		<div class="kekahire-<?php echo $atts[ 'listing' ]; ?>-listing-container kekahire-data-fetch" data-departmentId="<?php echo $atts[ 'defaultdepartment' ]; ?>" data-location="<?php echo $atts[ 'defaultlocation' ]; ?>" data-excludejobs="<?php echo $atts[ 'excludejobs' ]; ?>"  data-liststyle="<?php echo $atts[ 'listing' ]; ?>" data-items="<?php echo $atts[ 'items' ]; ?>" data-columnspage="<?php echo $atts[ 'columnspage' ]; ?>" data-page="1">
 			
 			<div class="kekahire-location-selector-wrapper">
 				
@@ -408,58 +432,6 @@ class Kekahire_Public {
 				</div>
 				
 				<div class="kekahire-listing-wrapper">
-					
-					<?php
-					
-					foreach ( $listings as $listing ) {
-						
-						$listing_passed = true;
-						
-						if( $atts[ 'excludejobs' ] !== "" ) {
-							
-							$excludejobs = explode(",", $atts[ 'excludejobs' ] );
-					
-							foreach ( $excludejobs as $excludejob ) {
-
-								if( $excludejob == $listing[ 'id' ] ) {
-
-									$listing_passed = false;
-
-								}
-
-							}
-
-						}
-						
-						if( $listing_passed ) {
-						
-						?>
-						
-						<div class="kekahire-listing" data-departmentId="<?php echo $listing['departmentId']; ?>" data-city="<?php echo $listing['jobLocations'][0]['city']; ?>">
-							
-							<div class="kekahire-listing-title-wrapper">
-								
-								<h3><?php echo $listing['title']; ?></h3>
-								
-								<?php if($listing['jobLocations'][0]['city']!="" && $listing['jobLocations'][0]['countryName']!="") { ?>
-								
-								<span><?php echo $listing['jobLocations'][0]['city']; ?>,<?php echo $listing['jobLocations'][0]['countryName']; ?></span>
-								
-								<?php } ?>
-							
-							</div>
-							
-							<div class="kekahire-listing-button-wrapper">
-								
-								<a href="https://<?php echo $kekahire_subdomain; ?>.kekahire.com/jobdetails/<?php echo $listing['id']; ?>/" target="_blank" class="kekahire-apply-button">Apply Now</a>
-							
-							</div>
-						
-						</div>
-						
-						<?php } ?>
-					
-					<?php } ?>
 				
 				</div>
 			
@@ -477,7 +449,7 @@ class Kekahire_Public {
 		
 		?>
 		
-		<div class="kekahire-grid-listing-container kekahire-data-fetch" data-department="<?php echo $atts[ 'defaultdepartment' ]; ?>" data-location="<?php echo $atts[ 'defaultlocation' ]; ?>">
+		<div class="kekahire-<?php echo $atts[ 'listing' ]; ?>-listing-container kekahire-data-fetch" data-departmentId="<?php echo $atts[ 'defaultdepartment' ]; ?>" data-location="<?php echo $atts[ 'defaultlocation' ]; ?>" data-excludejobs="<?php echo $atts[ 'excludejobs' ]; ?>"  data-liststyle="<?php echo $atts[ 'listing' ]; ?>" data-items="<?php echo $atts[ 'items' ]; ?>" data-columnspage="<?php echo $atts[ 'columnspage' ]; ?>" data-page="1">
 			
 			<div class="kekahire-location-selector-wrapper">
 				
@@ -590,62 +562,6 @@ class Kekahire_Public {
 			<div class="kekahire-sidebar-listing-wrapper">
 				
 				<div class="kekahire-listing-wrapper">
-				
-					<?php
-					
-					foreach ( $listings as $listing ) {
-						
-						$listing_passed = true;
-						
-						if( $atts[ 'excludejobs' ] !== "" ) {
-							
-							$excludejobs = explode(",", $atts[ 'excludejobs' ] );
-					
-							foreach ( $excludejobs as $excludejob ) {
-
-								if( $excludejob == $listing[ 'id' ] ) {
-
-									$listing_passed = false;
-
-								}
-
-							}
-
-						}
-						
-						if( $listing_passed ) {
-							
-						?>
-						
-						<div class="kekahire-listing kekahire-col-default-<?php echo $atts[ 'itemsinrow' ]; ?>" data-departmentId="<?php echo $listing['departmentId']; ?>" data-city="<?php echo $listing['jobLocations'][0]['city']; ?>">
-							
-							<div class="kekahire-listing-container">
-								
-								<div class="kekahire-listing-title-wrapper">
-									
-									<h3><?php echo $listing['title']; ?></h3>
-								
-								</div>
-								
-								<div class="kekahire-listing-button-wrapper">
-									
-									<?php if($listing['jobLocations'][0]['city']!="" && $listing['jobLocations'][0]['countryName']!="") { ?>
-									
-									<span><?php echo $listing['jobLocations'][0]['city']; ?>,<?php echo $listing['jobLocations'][0]['countryName']; ?></span>
-									
-									<?php } ?>
-									
-									<a href="https://<?php echo $kekahire_subdomain; ?>.kekahire.com/jobdetails/<?php echo $listing['id']; ?>/" target="_blank" class="kekahire-apply-button">Apply Now</a>
-								
-								</div>
-							
-							</div>
-						
-						</div>
-						
-						<?php } ?>
-					
-					<?php } ?>
 				
 				</div>
 			
@@ -769,6 +685,176 @@ class Kekahire_Public {
 
 		return $output;
 
+	}
+	
+	/**
+	 * Callback to display listings.
+	 *
+	 * @since    1.0.0
+	 */
+	public function kekahire_load_listings(){
+		
+		$kekahire_subdomain = get_option( 'kekahire_subdomain' );
+		
+		$kekahire_listings_payload = wp_remote_get( "https://$kekahire_subdomain.kekahire.com/api/jobs/active/" );
+
+		$listings = json_decode( $kekahire_listings_payload[ 'body' ] , true );
+		
+		$departmentId = $_REQUEST['departmentId'];
+		
+		$city         = $_REQUEST['city'];
+		
+		$excludejobs  = $_REQUEST['excludejobs'];
+		
+		$liststyle    = $_REQUEST['liststyle'];
+		
+		$items        = $_REQUEST['items'];
+		
+		$columnspage      = $_REQUEST['columnspage'];
+		
+		$page         = $_REQUEST['page'];
+		
+		$excludejobs  = explode(",", $excludejobs );
+		
+		$listingarray = array();
+		
+		$count        = 0;
+		
+		$output = '';
+					
+		foreach ( $listings as $listing ) {
+			
+			$listing_passed = true;
+			
+			if (in_array($listing[ 'id' ], $excludejobs)) {
+				
+				$listing_passed = false;
+				
+			}
+			
+			if( $departmentId != "" && $departmentId != $listing['departmentId'] ) {
+					
+					$listing_passed = false;
+				
+			}
+			
+			if( $city != "" && $city != $listing['jobLocations'][0]['city'] ) {
+
+					$listing_passed = false;
+				
+			}
+			
+			if( $listing_passed ) {
+				
+				$listingarray[$count]['title'] = $listing['title'];
+				
+				$listingarray[$count]['city'] = $listing['jobLocations'][0]['city'];
+				
+				$listingarray[$count]['country'] = $listing['jobLocations'][0]['countryName'];
+				
+				$listingarray[$count]['id'] = $listing['id'];
+				
+				$count++;
+				
+			}
+			
+		}
+		
+		$listingcount = count($listingarray);
+		
+		$listingtotalpages = ceil($listingcount/$items);
+		
+		$listings = array_slice( $listingarray, ( $page - 1 )*$items , $items );
+		
+		if( $liststyle  == "smart" ) {
+			
+			foreach ( $listings as $listing ) {	
+				
+			?>
+			
+			<div class="kekahire-listing">
+						
+				<div class="kekahire-listing-title-wrapper">
+					
+					<h3><?php echo $listing['title']; ?></h3>
+					
+					<?php if($listing['city']!="" && $listing['country']!="") { ?>
+					
+					<span><?php echo $listing['city']; ?>,<?php echo $listing['country']; ?></span>
+					
+					<?php } ?>
+				
+				</div>
+				
+				<div class="kekahire-listing-button-wrapper">
+					
+					<a href="https://<?php echo $kekahire_subdomain; ?>.kekahire.com/jobdetails/<?php echo $listing['id']; ?>/" target="_blank" class="kekahire-apply-button"><?php _e( 'Apply Now', 'kekahire' ); ?></a>
+				
+				</div>
+			
+			</div>
+			
+			<?php 
+			
+			}
+			
+		
+		}
+					
+		else if ( $liststyle  == "grid" ) {
+			
+			foreach ( $listings as $listing ) {	
+					
+			?>
+			
+			<div class="kekahire-listing kekahire-col-default-<?php echo $columnspage; ?>">
+				
+				<div class="kekahire-listing-container">
+					
+					<div class="kekahire-listing-title-wrapper">
+						
+						<h3><?php echo $listing['title']; ?></h3>
+					
+					</div>
+					
+					<div class="kekahire-listing-button-wrapper">
+						
+						<?php if($listing['city']!="" && $listing['country']!="") { ?>
+						
+						<span><?php echo $listing['city']; ?>,<?php echo $listing['country']; ?></span>
+						
+						<?php } ?>
+						
+						<a href="https://<?php echo $kekahire_subdomain; ?>.kekahire.com/jobdetails/<?php echo $listing['id']; ?>/" target="_blank" class="kekahire-apply-button"><?php _e( 'Apply Now', 'kekahire' ); ?></a>
+					
+					</div>
+				
+				</div>
+			
+			</div>
+			
+			<?php
+				
+			} 
+		
+		} 
+		
+		if( $listingtotalpages > $page ) {
+			
+		?>
+		
+		<div class="kekahire-pagination">
+		
+			<span data-loadpage="<?php echo $page+1; ?>">Load More</span>	
+		
+		</div>
+		
+		<?php
+		
+		}
+		
+		die($output);
+		
 	}
 
 }

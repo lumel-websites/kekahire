@@ -183,6 +183,10 @@ class Kekahire {
 		
 		/*Add shortcode*/ 
 		$this->loader->add_action( 'init' , $plugin_public, 'kekahire_add_shortcodes' );
+		
+		/* Ajax function to get listings */
+		$this->loader->add_action('wp_ajax_nopriv_kekahire_load_listings', $plugin_public, 'kekahire_load_listings');
+		$this->loader->add_action('wp_ajax_kekahire_load_listings', $plugin_public, 'kekahire_load_listings');
 
 	}
 

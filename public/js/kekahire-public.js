@@ -42,33 +42,45 @@
 		
 		var loadlisting = function(){
 			
-			var departmentId = $(".kekahire-data-fetch").attr("data-department");
+			var departmentId = $(".kekahire-data-fetch").attr("data-departmentId");
 			var city         = $(".kekahire-data-fetch").attr("data-location");
-
-			if( departmentId == "" && city == "" ) {
-				$(".kekahire-listing").show();
-			} else {
-				$(".kekahire-listing").hide();
-				
-				$(".kekahire-listing").each(function() {
-					if(departmentId=="") {
-						if($(this).attr("data-city")==city) { $(this).show(); }
-					} 
-					else if (city=="") {
-						if($(this).attr("data-departmentId")==departmentId) { $(this).show(); }
+			var excludejobs  = $(".kekahire-data-fetch").attr("data-excludejobs");
+			var liststyle    = $(".kekahire-data-fetch").attr("data-liststyle");
+			var items        = $(".kekahire-data-fetch").attr("data-items");
+			var columnspage      = $(".kekahire-data-fetch").attr("data-columnspage");
+			var page         = $(".kekahire-data-fetch").attr("data-page");
+			
+			var str = '&departmentId=' + departmentId + '&city=' + city + '&excludejobs=' + excludejobs + '&liststyle=' + liststyle + '&items=' + items + '&columnspage=' + columnspage + '&page=' + page + '&action=kekahire_load_listings';
+			$.ajax({
+				type: "POST",
+				dataType: "html",
+				url: KH_OBJECT.ajaxurl,
+				data: str,
+				success: (data) => {
+					var $data = $(data);
+					if($data.length){
+						$(".kekahire-pagination.active").remove();
+						$(".kekahire-listing-wrapper").append($data);
+						$(".kekahire-data-fetch").attr("data-page",parseInt(page) + parseInt(1));
 					}
 					else {
-						if($(this).attr("data-departmentId")==departmentId && $(this).attr("data-city")==city) { $(this).show(); }
+						$(".kekahire-listing-wrapper").html("No Jobs");
 					}
-				});
-			}
+				}
+
+			});
+			return false;
+
+
 			
 		}
 		
 		loadlisting();
 		
 		$('.kekahire-sidebar-wrapper li').click( function() { 
-			$(".kekahire-data-fetch").attr("data-department",$(this).attr("data-value"));
+			$(".kekahire-data-fetch").attr("data-departmentId",$(this).attr("data-value"));
+			$(".kekahire-data-fetch").attr("data-page",parseInt(1));
+			$(".kekahire-listing-wrapper").html("");
 			loadlisting();
 			
 			$(".kekahire-sidebar-wrapper li").removeClass("selected");
@@ -76,12 +88,22 @@
 		});
 		
 		$('.kekahire-department-selector select').change( function() { 
-			$(".kekahire-data-fetch").attr("data-department",$(this).val());
+			$(".kekahire-data-fetch").attr("data-departmentId",$(this).val());
+			$(".kekahire-data-fetch").attr("data-page",parseInt(1));
+			$(".kekahire-listing-wrapper").html("");
 			loadlisting();
 		});
 		
 		$('.kekahire-location-selector select').change( function() { 
 			$(".kekahire-data-fetch").attr("data-location",$(this).val());
+			$(".kekahire-data-fetch").attr("data-page",parseInt(1));
+			$(".kekahire-listing-wrapper").html("");
+			loadlisting();
+		});
+		
+		$('body').on('click', '.kekahire-pagination span', function() { 
+			$(".kekahire-pagination span").html("Loading");
+			$(".kekahire-pagination").addClass("active");
 			loadlisting();
 		});
 		
