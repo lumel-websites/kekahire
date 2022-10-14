@@ -50,25 +50,26 @@ $(document).ready(function(e){
 
 	 	var buildShortcode = function(ee){
 			
-			var title 		= $('#kekahire-title').val();
-			var listing     = $('#kekahire-listing-selector').val();
-	 		var departments = $('#kekahire-department-selector').val();
-	 		var country 	= $('#kekahire-location-selector').val();
-	 		var state		= $('#kekahire-state-selector').val();
-	 		var city		= $('#kekahire-city-selector').val();
-			var zerolisting	= $('#kekahire-jobs-zero-listing').val();
-			var hidecount	= $('#kekahire-jobs-hide-count').val();
+			var title 		        = $('#kekahire-title').val();
+			var listing             = $('#kekahire-listing-selector').val();
+	 		var departments         = $('#kekahire-department-selector').val();
+	 		var country 	        = $('#kekahire-location-selector').val();
+	 		var state		        = $('#kekahire-state-selector').val();
+	 		var city		        = $('#kekahire-city-selector').val();
+			var zerolisting	        = $('#kekahire-jobs-zero-listing').val();
+			var hidecount	        = $('#kekahire-jobs-hide-count').val();
 			var defaultdepartment	= $('#kekahire-default-department-selector').val();
-			var defaultlocation	= $('#kekahire-default-location-selector').val();
-			var itemsinrow	= $('#kekahire-itemsinrow-selector').val();
-			var exclude		= $('#kekahire-jobs-exclude').val();
+			var defaultlocation	    = $('#kekahire-default-location-selector').val();
+			var items	            = $('#kekahire-items').val();
+			var columnspage	        = $('#kekahire-columnspage').val();
+			var exclude		        = $('#kekahire-jobs-exclude').val();
 			
 			if(listing == "smart") {
 				departments = null;
 				country = null;
 				state = null;
 				city = null;
-				itemsinrow = null;
+				columnspage = null;
 				
 				$('.kekahire-admin-simple-listing-row').hide();
 				$('.kekahire-admin-smart-listing-row').show();
@@ -128,8 +129,12 @@ $(document).ready(function(e){
 	 			defaultlocation = "";
 	 		}
 			
-			if( itemsinrow == null ) {
-	 			itemsinrow = "";
+			if( items == null ) {
+	 			items = "";
+	 		}
+			
+			if( columnspage == null ) {
+	 			columnspage = "";
 	 		}
 
 	 		if( title !== '' ){
@@ -172,8 +177,12 @@ $(document).ready(function(e){
 	 			shortcode += ' defaultlocation="' + defaultlocation + '"';	
 	 		}
 			
-			if( itemsinrow !== '' ){
-	 			shortcode += ' itemsinrow="' + itemsinrow + '"';	
+			if( items !== '' ){
+	 			shortcode += ' items="' + items + '"';
+	 		}
+			
+			if( columnspage !== '' ){
+	 			shortcode += ' columnspage="' + columnspage + '"';	
 	 		}
 			
 			if( exclude !== '' ){
@@ -195,7 +204,8 @@ $(document).ready(function(e){
 		$('#kekahire-jobs-hide-count').change( buildShortcode );
 		$('#kekahire-default-department-selector').change( buildShortcode );
 		$('#kekahire-default-location-selector').change( buildShortcode );
-		$('#kekahire-itemsinrow-selector').change( buildShortcode );
+		$('#kekahire-items').keyup( buildShortcode );
+		$('#kekahire-columnspage').change( buildShortcode );
 		$('#kekahire-jobs-exclude').keyup( buildShortcode );
 		
 		$("#kekahire-state-selector").on("change",function(){ 
