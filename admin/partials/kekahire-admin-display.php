@@ -100,7 +100,7 @@
 				
 				<?php 
 				
-				$classObject = new CB_Countries();
+				$classObject = new KH_Countries();
 				
 				$countriesname = $classObject->get_countries();
 				
@@ -221,21 +221,13 @@
     			
 				</tr>
 				
-				<tr class="kekahire-admin-smart-listing-row">
-    				
-					<th scope="row"><?php _e( 'Pagination', 'kekahire' ); ?></th>
-    				
-					<td><input type="text" id="kekahire-items" placeholder="Pagination"></td>
-    			
-				</tr>
-				
 				<tr class="kekahire-admin-grid-listing-row">
     				
 					<th scope="row"><?php _e( 'Number of items in a row', 'kekahire' ); ?></th>
 					
 					<td>
     					
-						<select id="kekahire-columnspage">
+						<select id="kekahire-itemsinrow-selector">
 							<option value="2"> 2 </option>
 							<option value="3"> 3 </option>
 							<option value="4"> 4 </option>

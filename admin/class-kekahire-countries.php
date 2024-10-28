@@ -22,7 +22,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-class CB_Countries {
+class KH_Countries {
 
 	/**
 	 * Auto-load in-accessible properties on demand.
@@ -91,4 +91,4 @@ class CB_Countries {
 
 }
 
-$CB_Countries = new CB_Countries();
+$KH_Countries = new KH_Countries();
