@@ -166,11 +166,11 @@ class Kekahire_Admin {
 
 		$kekahire_subdomain = get_option( 'kekahire_subdomain' );
 		
-		if($kekahire_subdomain !== "" ) {
+		if($kekahire_subdomain !== false && $kekahire_subdomain !== '' ) {
 			
-			$kekahire_dept_payload = wp_remote_get( "https://$kekahire_subdomain.kekahire.com/api/organization/departments/" );
+			$kekahire_dept_payload = wp_remote_get( "https://$kekahire_subdomain.keka.com/careers/api/organization/departments/" );
 			
-			$kekahire_location_payload = wp_remote_get( "https://$kekahire_subdomain.kekahire.com/api/organization/locations/" );
+			$kekahire_location_payload = wp_remote_get( "https://$kekahire_subdomain.keka.com/careers/api/organization/locations/" );
 
 			$departments = json_decode( $kekahire_dept_payload[ 'body' ] , true );
 			
@@ -238,7 +238,7 @@ class Kekahire_Admin {
 
 		?>
 		
-		<input type="text" id="kekahire_subdomain" name="kekahire_subdomain" value="<?php echo get_option( 'kekahire_subdomain' ); ?>" />.kekahire.com
+		<input type="text" id="kekahire_subdomain" name="kekahire_subdomain" value="<?php echo get_option( 'kekahire_subdomain' ); ?>" />.keka.com
 		
 		<?php
 
@@ -343,7 +343,7 @@ class Kekahire_Admin {
 		
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-kekahire-countries.php';
 		
-		$classObject = new CB_Countries();
+		$classObject = new KH_Countries();
 		
 		$statesname = $classObject->get_states();
 
@@ -357,7 +357,7 @@ class Kekahire_Admin {
 		
 		$kekahire_subdomain = get_option( 'kekahire_subdomain' );
 		
-		$kekahire_location_payload = wp_remote_get( "https://$kekahire_subdomain.kekahire.com/api/organization/locations/" );
+		$kekahire_location_payload = wp_remote_get( "https://$kekahire_subdomain.keka.com/careers/api/organization/locations/" );
 		
 		$locations = json_decode( $kekahire_location_payload[ 'body' ] , true );
 		
