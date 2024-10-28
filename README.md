@@ -3,7 +3,7 @@
 * Tags: jobs, listing, keka
 * Requires at least: 5.8.0
 * Tested up to: 5.8.0
-* Stable tag: 1.0.1
+* Stable tag: 1.1.0
 * License: GPLv2 or later
 * License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -31,7 +31,7 @@ them in a theme agnostic layout along with options to filter jobs based on depar
 
 ## Installation 
 
-1. Upload `kekahire-1.0.1.zip` to the `/wp-content/plugins/` directory
+1. Upload `kekahire-1.1.0.zip` to the `/wp-content/plugins/` directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
 1. Place `[kekajobs]` shortcode in your templates
 
@@ -39,8 +39,10 @@ them in a theme agnostic layout along with options to filter jobs based on depar
 
 ## Changelog 
 
-### v1.0.1
-* Bug Fixes
+### v1.1.0
+* Update: Keka API URLs updated with new endpoints
+* Fix: Countries class conflict with Chargebee API
+* Fix: Admin Fatal error on fresh plugin installation fixed
 
 ### v1.0.0
 * Initial release.
